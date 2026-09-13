@@ -1,0 +1,102 @@
+.screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background:
+    radial-gradient(ellipse at 65% 15%, rgba(109,40,217,0.06) 0%, transparent 55%),
+    radial-gradient(ellipse at 10% 85%, rgba(14,124,134,0.05) 0%, transparent 50%),
+    var(--bg);
+}
+
+.logo {
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-weight: 800;
+  font-size: 2rem;
+  margin-bottom: 4px;
+}
+.logo span {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tagline {
+  color: var(--text-muted);
+  font-size: 0.84rem;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 36px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow-md);
+}
+
+.card h2 {
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 22px;
+  color: var(--text);
+}
+
+.btnPrimary {
+  width: 100%;
+  background: var(--grad);
+  border: none;
+  border-radius: 8px;
+  padding: 13px;
+  color: #fff;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-top: 8px;
+  transition: opacity 0.2s;
+}
+.btnPrimary:hover { opacity: 0.88; }
+.btnPrimary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.error {
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.84rem;
+  color: #DC2626;
+  margin-bottom: 14px;
+}
+
+.success {
+  background: var(--cyan-pale);
+  border: 1px solid #A7F0F4;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.84rem;
+  color: var(--cyan);
+  margin-bottom: 14px;
+}
+
+.switch {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 0.83rem;
+  color: var(--text-muted);
+}
+.switch a {
+  color: var(--violet);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .card { padding: 24px; }
+}
