@@ -7,11 +7,36 @@ import Step3Build from './steps/Step3Build.jsx'
 import Step4Package from './steps/Step4Package.jsx'
 import Step5Launch from './steps/Step5Launch.jsx'
 
+function stripHtml(html) {
+  return html.replace(/<[^>]+>/g, '').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&nbsp;/g,' ').trim()
+}
+
+function downloadAll(ideaData, outputs) {
+  const sections = [
+    { title: 'VEGA DIGITAL PRODUCT BUILDER — FAST TRACK SESSION EXPORT', content: `Generated: ${new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' })}\nNiche: ${ideaData.niche || '—'}\nAudience: ${ideaData.audience || '—'}\nIdea: ${ideaData.idea || '—'}` },
+    outputs.step1 && { title: 'STEP 1 — IDEA ANALYSIS', content: stripHtml(outputs.step1) },
+    outputs.step2 && { title: 'STEP 2 — MARKET VALIDATION', content: stripHtml(outputs.step2) },
+    outputs.step3 && { title: 'STEP 3 — PRODUCT BLUEPRINT', content: stripHtml(outputs.step3) },
+    outputs.step4 && { title: 'STEP 4 — PACKAGING BRIEF', content: stripHtml(outputs.step4) },
+    outputs.step5 && { title: 'STEP 5 — LAUNCH PLAN', content: stripHtml(outputs.step5) },
+  ].filter(Boolean)
+
+  const text = sections.map(s => `${'='.repeat(60)}\n${s.title}\n${'='.repeat(60)}\n\n${s.content}`).join('\n\n\n')
+
+  const blob = new Blob([text], { type: 'text/plain' })
+  const url  = URL.createObjectURL(blob)
+  const a    = document.createElement('a')
+  a.href     = url
+  a.download = `vega-fasttrack-${(ideaData.niche || 'product').toLowerCase().replace(/\s+/g,'-')}-${Date.now()}.txt`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
 export default function AppShell() {
-  const [currentStep, setCurrentStep] = useState(1)
+  const [currentStep,    setCurrentStep]    = useState(1)
   const [completedSteps, setCompletedSteps] = useState([])
-  const [ideaData, setIdeaData] = useState({})
-  const [outputs, setOutputs] = useState({})
+  const [ideaData,       setIdeaData]       = useState({})
+  const [outputs,        setOutputs]        = useState({})
 
   function markDone(step, output) {
     setCompletedSteps(prev => prev.includes(step) ? prev : [...prev, step])
@@ -24,6 +49,7 @@ export default function AppShell() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const hasAnyOutput = Object.keys(outputs).length > 0
   const stepProps = { ideaData, outputs, onComplete: markDone, onNext: goToStep, onBack: goToStep }
 
   return (
@@ -33,6 +59,22 @@ export default function AppShell() {
           <span>VEGA</span>
           <small>Digital Product Builder</small>
         </div>
+        {hasAnyOutput && (
+          <button
+            onClick={() => downloadAll(ideaData, outputs)}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6,
+              background: 'var(--violet-pale)', border: '1.5px solid var(--violet)',
+              borderRadius: 8, padding: '7px 14px', cursor: 'pointer',
+              fontFamily: "'Be Vietnam Pro', sans-serif", fontWeight: 700,
+              fontSize: '0.78rem', color: 'var(--violet)', transition: 'opacity .15s'
+            }}
+            onMouseOver={e => e.currentTarget.style.opacity = '.8'}
+            onMouseOut={e => e.currentTarget.style.opacity = '1'}
+          >
+            ↓ Save my session
+          </button>
+        )}
       </header>
 
       <main className={styles.main}>
