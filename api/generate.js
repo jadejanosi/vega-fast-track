@@ -19,7 +19,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 1000,
+        max_tokens: 8000,
         system,
         messages: [{ role: 'user', content: prompt }],
       }),
@@ -31,7 +31,15 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: data.error.message })
     }
 
-    return res.status(200).json({ result: data.content[0].text })
+    const text = data.content
+      .filter((block) => block.type === 'text')
+      .map((block) => block.text)
+      .join('')
+
+    return res.status(200).json({
+      result: text,
+      truncated: data.stop_reason === 'max_tokens',
+    })
   } catch (err) {
     return res.status(500).json({ error: 'API call failed' })
   }
